@@ -5,7 +5,7 @@ const API_URL = '/api';
 let currentSessionId = null;
 
 // DOM elements
-let chatMessages, chatInput, sendButton, totalCourses, courseTitles, resetButton;
+let chatMessages, chatInput, sendButton, totalCourses, courseTitles, resetButton, themeToggle;
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
@@ -16,8 +16,10 @@ document.addEventListener('DOMContentLoaded', () => {
     totalCourses = document.getElementById('totalCourses');
     courseTitles = document.getElementById('courseTitles');
     resetButton = document.getElementById('resetButton');
+    themeToggle = document.getElementById('themeToggle');
     
     setupEventListeners();
+    initializeTheme();
     createNewSession();
     loadCourseStats();
 });
@@ -33,6 +35,14 @@ function setupEventListeners() {
     // Reset functionality
     resetButton.addEventListener('click', resetConversation);
     
+    // Theme toggle functionality
+    themeToggle.addEventListener('click', toggleTheme);
+    themeToggle.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggleTheme();
+        }
+    });
     
     // Suggested questions
     document.querySelectorAll('.suggested-item').forEach(button => {
@@ -257,4 +267,32 @@ async function resetConversation() {
         resetButton.disabled = false;
         resetButton.innerHTML = originalText;
     }
+}
+
+// Theme functionality
+function initializeTheme() {
+    // Check for saved theme preference or default to dark
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    if (savedTheme === 'light') {
+        document.body.classList.add('light-theme');
+    }
+}
+
+function toggleTheme() {
+    const body = document.body;
+    const isLight = body.classList.contains('light-theme');
+    
+    if (isLight) {
+        body.classList.remove('light-theme');
+        localStorage.setItem('theme', 'dark');
+    } else {
+        body.classList.add('light-theme');
+        localStorage.setItem('theme', 'light');
+    }
+    
+    // Add a brief animation feedback
+    themeToggle.style.transform = 'scale(0.95)';
+    setTimeout(() => {
+        themeToggle.style.transform = '';
+    }, 150);
 }

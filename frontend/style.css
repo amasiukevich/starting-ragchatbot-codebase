@@ -46,9 +46,15 @@ body {
     padding: 0;
 }
 
-/* Header - Hidden */
+/* Header - With theme toggle */
 header {
-    display: none;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border-color);
 }
 
 header h1 {
@@ -795,8 +801,150 @@ details[open] .suggested-header::before {
     }
 }
 
+/* Theme Toggle Styles */
+.theme-toggle {
+    position: relative;
+    padding: 0.75rem;
+    background: var(--background);
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    width: 44px;
+    height: 44px;
+}
+
+.theme-toggle:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--focus-ring);
+    border-color: var(--primary-color);
+}
+
+.theme-toggle:hover {
+    background: var(--surface-hover);
+    border-color: var(--primary-color);
+    transform: scale(1.05);
+}
+
+.theme-toggle .sun-icon,
+.theme-toggle .moon-icon {
+    position: absolute;
+    transition: all 0.3s ease;
+    color: var(--text-primary);
+}
+
+.theme-toggle .sun-icon {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+}
+
+.theme-toggle .moon-icon {
+    opacity: 0;
+    transform: rotate(180deg) scale(0.8);
+}
+
+/* Light theme styles */
+body.light-theme {
+    /* Light background colors */
+    --background: #ffffff;
+    --surface: #f8fafc;
+    --surface-hover: #e2e8f0;
+    
+    /* Dark text for contrast */
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    
+    /* Adjusted primary and secondary colors */
+    --primary-color: #1e40af;
+    --primary-hover: #1d4ed8;
+    
+    /* Proper border and surface colors */
+    --border-color: #cbd5e1;
+    --user-message: #1e40af;
+    --assistant-message: #f1f5f9;
+    
+    /* Updated focus and shadow colors */
+    --focus-ring: rgba(30, 64, 175, 0.2);
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    
+    /* Welcome message styling for light theme */
+    --welcome-bg: #e0f2fe;
+    --welcome-border: #0ea5e9;
+}
+
+body.light-theme .theme-toggle .sun-icon {
+    opacity: 0;
+    transform: rotate(-180deg) scale(0.8);
+}
+
+body.light-theme .theme-toggle .moon-icon {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+}
+
+/* Light theme specific adjustments for better accessibility */
+body.light-theme .message-content code {
+    background-color: rgba(15, 23, 42, 0.08);
+    color: #1e293b;
+}
+
+body.light-theme .message-content pre {
+    background-color: rgba(15, 23, 42, 0.08);
+    border: 1px solid var(--border-color);
+}
+
+body.light-theme .message-content blockquote {
+    border-left: 3px solid var(--primary-color);
+    color: var(--text-secondary);
+}
+
+body.light-theme .loading span {
+    background: var(--text-secondary);
+}
+
+/* Enhanced contrast for light theme links */
+body.light-theme .message-content a {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+body.light-theme .message-content a:hover {
+    color: var(--primary-hover);
+    background-color: rgba(30, 64, 175, 0.05);
+}
+
+body.light-theme .sources-content a {
+    color: var(--primary-color);
+    border-color: rgba(30, 64, 175, 0.2);
+}
+
+body.light-theme .sources-content a:hover {
+    color: var(--primary-hover);
+    background-color: rgba(30, 64, 175, 0.08);
+    border-color: rgba(30, 64, 175, 0.4);
+}
+
 @media (max-width: 1024px) {
     .sidebar {
         width: 280px;
+    }
+}
+
+@media (max-width: 768px) {
+    header {
+        padding: 1rem;
+    }
+    
+    header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .theme-toggle {
+        width: 40px;
+        height: 40px;
+        padding: 0.6rem;
     }
 }
