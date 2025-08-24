@@ -13,6 +13,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Web interface**: http://localhost:8000
 - **API documentation**: http://localhost:8000/docs
 
+### Code Quality
+- **Format code**: `./scripts/format.sh` (runs Black + isort)
+- **Lint code**: `./scripts/lint.sh` (runs flake8)
+- **All quality checks**: `./scripts/quality.sh` (format + lint + tests)
+- **Manual formatting**: `uv run black backend/ main.py`
+- **Manual import sorting**: `uv run isort backend/ main.py`
+- **Manual linting**: `uv run flake8 backend/ main.py --max-line-length=88 --extend-ignore=E203,W503`
+
 ## Architecture Overview
 
 This is a **Retrieval-Augmented Generation (RAG) chatbot** system that answers questions about course materials using semantic search and AI-powered responses.
