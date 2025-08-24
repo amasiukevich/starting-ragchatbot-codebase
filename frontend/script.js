@@ -5,7 +5,7 @@ const API_URL = '/api';
 let currentSessionId = null;
 
 // DOM elements
-let chatMessages, chatInput, sendButton, totalCourses, courseTitles;
+let chatMessages, chatInput, sendButton, totalCourses, courseTitles, resetButton;
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     sendButton = document.getElementById('sendButton');
     totalCourses = document.getElementById('totalCourses');
     courseTitles = document.getElementById('courseTitles');
+    resetButton = document.getElementById('resetButton');
     
     setupEventListeners();
     createNewSession();
@@ -28,6 +29,9 @@ function setupEventListeners() {
     chatInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') sendMessage();
     });
+    
+    // Reset functionality
+    resetButton.addEventListener('click', resetConversation);
     
     
     // Suggested questions
@@ -122,10 +126,26 @@ function addMessage(content, type, sources = null, isWelcome = false) {
     let html = `<div class="message-content">${displayContent}</div>`;
     
     if (sources && sources.length > 0) {
+        // Format sources - handle both old string format and new object format for backwards compatibility
+        const formattedSources = sources.map(source => {
+            if (typeof source === 'string') {
+                // Legacy format - just display as text
+                return source;
+            } else if (source && source.text) {
+                // New format with potential link
+                if (source.link) {
+                    return `<a href="${source.link}" target="_blank" rel="noopener noreferrer">${source.text}</a>`;
+                } else {
+                    return source.text;
+                }
+            }
+            return 'Unknown source';
+        });
+        
         html += `
             <details class="sources-collapsible">
                 <summary class="sources-header">Sources</summary>
-                <div class="sources-content">${sources.join(', ')}</div>
+                <div class="sources-content">${formattedSources.join(' ')}</div>
             </details>
         `;
     }
@@ -187,5 +207,54 @@ async function loadCourseStats() {
         if (courseTitles) {
             courseTitles.innerHTML = '<span class="error">Failed to load courses</span>';
         }
+    }
+}
+
+// Reset conversation function
+async function resetConversation() {
+    try {
+        // Reset button visual feedback
+        const originalText = resetButton.innerHTML;
+        resetButton.disabled = true;
+        resetButton.innerHTML = `
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="animation: spin 1s linear infinite;">
+                <polyline points="23 4 23 10 17 10"></polyline>
+                <polyline points="1 20 1 14 7 14"></polyline>
+                <path d="m3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+            </svg>
+            Resetting...
+        `;
+        
+        // Clear session on backend if we have an active session
+        if (currentSessionId) {
+            await fetch(`${API_URL}/reset-session`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    session_id: currentSessionId
+                })
+            });
+        }
+        
+        // Reset frontend state
+        currentSessionId = null;
+        chatMessages.innerHTML = '';
+        
+        // Show welcome message
+        addMessage('Welcome to the Course Materials Assistant! I can help you with questions about courses, lessons and specific content. What would you like to know?', 'assistant', null, true);
+        
+        // Small delay for better UX
+        setTimeout(() => {
+            resetButton.disabled = false;
+            resetButton.innerHTML = originalText;
+        }, 500);
+        
+    } catch (error) {
+        console.error('Error resetting conversation:', error);
+        // Reset button state even on error
+        resetButton.disabled = false;
+        resetButton.innerHTML = originalText;
     }
 }

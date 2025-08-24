@@ -243,6 +243,26 @@ header h1 {
 .sources-content {
     padding: 0 0.5rem 0.25rem 1.5rem;
     color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.sources-content a {
+    color: var(--text-primary);
+    text-decoration: underline;
+    transition: all 0.2s ease;
+    padding: 0.15rem 0.3rem;
+    border-radius: 4px;
+    display: inline-block;
+    margin: 0.1rem 0.2rem 0.1rem 0;
+    font-weight: 500;
+    border: 1px solid transparent;
+}
+
+.sources-content a:hover {
+    color: var(--primary-color);
+    background-color: rgba(37, 99, 235, 0.1);
+    border-color: rgba(37, 99, 235, 0.3);
+    text-decoration: none;
 }
 
 /* Markdown formatting styles */
@@ -254,6 +274,18 @@ header h1 {
 .message-content h6 {
     margin: 0.5rem 0;
     font-weight: 600;
+}
+
+.message-content a {
+    color: var(--text-primary);
+    text-decoration: underline;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.message-content a:hover {
+    color: var(--primary-color);
+    text-decoration: none;
 }
 
 .message-content h1 { font-size: 1.5rem; }
@@ -632,6 +664,58 @@ details[open] .suggested-header::before {
     border-color: var(--primary-color);
     color: var(--primary-color);
     transform: translateX(2px);
+}
+
+/* Reset Button Styles */
+.reset-section {
+    margin-bottom: 1.5rem;
+}
+
+.reset-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.5rem 0;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.reset-button:focus {
+    outline: none;
+    color: var(--primary-color);
+}
+
+.reset-button:hover {
+    color: var(--primary-color);
+}
+
+.reset-button svg {
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+}
+
+.reset-button:hover svg {
+    transform: rotate(180deg);
+}
+
+.reset-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 
 /* Responsive Design */
